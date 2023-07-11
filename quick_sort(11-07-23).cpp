@@ -1,71 +1,55 @@
-
-#include <iostream>
+#include<iostream>
+#include<cmath>
 using namespace std;
+class Quick{
+    public:
+    int a[1000],l,h,count;
+    float n;
+    void swap(int *x, int *y)
+    {
+        int t = *x;
+        *x = *y;
+        *y = t;
+    }
+    int partition(int a[], int l, int h)
+    {
+        int p = a[h];
+        int i = (l - 1);
+        for (int j = l; j < h; j++)
+        {
+            if (a[j] <= p)
+            {
+                i++;
+                swap(&a[i], &a[j]);
+            }
+        }
+        count++;
+        swap(&a[i + 1], &a[h]);
+        return (i + 1);
+    }
 
-int partition(int arr[], int start, int end)
-{
-
-	int pivot = arr[start];
-
-	int count = 0;
-	for (int i = start + 1; i <= end; i++) {
-		if (arr[i] <= pivot)
-			count++;
-	}
-
-
-	int pivotIndex = start + count;
-	swap(arr[pivotIndex], arr[start]);
-
-	
-	int i = start, j = end;
-
-	while (i < pivotIndex && j > pivotIndex) {
-
-		while (arr[i] <= pivot) {
-			i++;
-		}
-
-		while (arr[j] > pivot) {
-			j--;
-		}
-
-		if (i < pivotIndex && j > pivotIndex) {
-			swap(arr[i++], arr[j--]);
-		}
-	}
-
-	return pivotIndex;
-}
-
-void quickSort(int arr[], int start, int end)
-{
-
-	
-	if (start >= end)
-		return;
-
-	
-	int p = partition(arr, start, end);
-
-	
-	quickSort(arr, start, p - 1);
-
-	
-	quickSort(arr, p + 1, end);
-}
+    void quickSort(int a[], int l, int h)
+    {
+        if (l < h)
+        {
+            int pi = partition(a, l, h);
+            quickSort(a,l, pi - 1);
+            quickSort(a, pi + 1, h);
+        }
+    }
+};
 
 int main()
 {
-
-	int arr[] = { 9, 3, 4, 2, 1, 8 };
-	int n = 6;
-
-	quickSort(arr, 0, n - 1);
-
-	for (int i = 0; i < n; i++) {
-		cout << arr[i] << " ";
-	}
-
-	return 0;
+  Quick obj;
+  cout<<"\nEnter n";
+  cin>>obj.n;
+  for(int i=0;i<obj.n;i++)
+        obj.a[i]=i;
+  obj.quickSort(obj.a, 0, obj.n - 1);
+  cout<<"\ncount/n:"<<(obj.count/obj.n);
+  cout<<"\ncount/nlogn:"<<(obj.count/(obj.n*log(obj.n)));
+  cout<<"\ncount/n2:"<<(obj.count/(obj.n*obj.n));
+  cout<<"\ncount/n3:"<<(obj.count/(obj.n*obj.n*obj.n));
+  return 0;
 }
