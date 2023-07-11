@@ -1,72 +1,71 @@
-#include <iostream>
-#include <vector>
-
-
-void merge(std::vector<int>& arr, int left, int mid, int right) {
-    int i = left;        
-    int j = mid + 1;     
-    int k = 0;           
-    std::vector<int> temp(right - left + 1);  
-
-   
-    while (i <= mid && j <= right) {
-        if (arr[i] <= arr[j]) {
-            temp[k++] = arr[i++];
-        } else {
-            temp[k++] = arr[j++];
+#include<iostream>
+using namespace std;
+class MergeSort
+{
+public:
+    int l,r,count=0;
+    int a[1000],b[1000],c[1000];
+    void split(int a[], int l,int r)
+    {
+        int m;
+        if(l<r)
+        {
+            count++;
+            m=l+(r-l)/2;
+            split(a,l,m);
+            split(a,m+1,r);
+            Merge(a,l,m,r);
         }
     }
+    void Merge(int a[],int l, int m, int r)
+    {
+        int i=0, j=0, k=0, n1 = m-l+1, n2 = r-m;
+        int b[n1], c[n2];
+        for (i = 0; i < n1; i++)
+            b[i] = a[l + i];
+        for (j = 0; j < n2; j++)
+            c[j] = a[m + 1 + j];
+        i=0;
+        j=0;
+        k=l;
 
-    
-    while (i <= mid) {
-        temp[k++] = arr[i++];
+        while( i<n1 && j<n2 )
+        {
+            if(b[i]<=c[j])
+            {
+                a[k]=b[i];
+                i++;
+            }
+            else
+            {
+                a[k]=c[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1)
+            a[k++] = b[i++];
+
+
+        while (j < n2)
+            a[k++] = c[j++];
     }
-
- 
-    while (j <= right) {
-        temp[k++] = arr[j++];
-    }
-
-    for (i = left, k = 0; i <= right; i++, k++) {
-        arr[i] = temp[k];
-    }
-}
-
-
-void mergeSort(std::vector<int>& arr, int left, int right) {
-    if (left >= right) {
-     
-        return;
-    }
-
-    int mid = left + (right - left) / 2;  // Calculate the middle index
-
-   
-    mergeSort(arr, left, mid);
-    mergeSort(arr, mid + 1, right);
-
-    merge(arr, left, mid, right);
-}
-
-
-void printArray(const std::vector<int>& arr) {
-    for (int num : arr) {
-        std::cout << num << " ";
-    }
-    std::cout << std::endl;
-}
-
-int main() {
-    std::vector<int> arr = {9, 3, 17, 1, 25, 6, 11};
-    int size = arr.size();
-
-    std::cout << "Original array: ";
-    printArray(arr);
-
-    mergeSort(arr, 0, size - 1);
-
-    std::cout << "Sorted array: ";
-    printArray(arr);
-
-    return 0;
+};
+int main()
+{
+    MergeSort obj;
+    float n;
+    cout<<"Enter size of array";
+    cin>>n;
+    obj.r=n;
+    cout<<"\nUnsorted Array";
+    for(int i=0;i<obj.r;i++)
+            obj.a[i]=i;
+    obj.l=0;
+    obj.split(obj.a,obj.l,obj.r-1);
+    cout<<"\ncount/n:"<<(obj.count/n);
+    cout<<"\ncount/n2:"<<(obj.count/(n*n));
+    cout<<"\ncount/n3:"<<(obj.count/(n*n*n));
+    return 0;
 }
