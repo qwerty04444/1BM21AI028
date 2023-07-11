@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 
-// Insertion Sort function
 void insertionSort(std::vector<int>& arr) {
     int size = arr.size();
 
@@ -9,7 +8,7 @@ void insertionSort(std::vector<int>& arr) {
         int key = arr[i];
         int j = i - 1;
 
-        // Move elements of arr[0..i-1], that are greater than key, to one position ahead of their current position
+        
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
             j--;
@@ -19,7 +18,7 @@ void insertionSort(std::vector<int>& arr) {
     }
 }
 
-// Utility function to print an array
+
 void printArray(const std::vector<int>& arr) {
     for (int num : arr) {
         std::cout << num << " ";
@@ -27,7 +26,7 @@ void printArray(const std::vector<int>& arr) {
     std::cout << std::endl;
 }
 
-// Test the insertionSort function
+
 int main() {
     std::vector<int> arr = {9, 3, 17, 1, 25, 6, 11};
 
