@@ -37,11 +37,11 @@ class LinBin
 
             else if(a[M]>key)
             {
-                L=M+1;
+              U=M-1;
             }
             else
-            {
-                U=M-1;
+            { L=M+1;
+
             }
         }
         if(flag)
