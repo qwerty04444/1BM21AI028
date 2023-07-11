@@ -1,17 +1,18 @@
 #include<iostream>
+#include<cmath>
 using namespace std;
 class MergeSort
 {
 public:
-    int l,r,count=0;
+    int l,r,count;
     int a[1000],b[1000],c[1000];
     void split(int a[], int l,int r)
     {
         int m;
         if(l<r)
         {
-            count++;
             m=l+(r-l)/2;
+            count++;
             split(a,l,m);
             split(a,m+1,r);
             Merge(a,l,m,r);
@@ -45,11 +46,16 @@ public:
         }
 
         while (i < n1)
+        {
             a[k++] = b[i++];
+        }
+
 
 
         while (j < n2)
+        {
             a[k++] = c[j++];
+        }
     }
 };
 int main()
@@ -65,6 +71,7 @@ int main()
     obj.l=0;
     obj.split(obj.a,obj.l,obj.r-1);
     cout<<"\ncount/n:"<<(obj.count/n);
+    cout<<"\ncount/nlogn:"<<(obj.count/n*log(n));
     cout<<"\ncount/n2:"<<(obj.count/(n*n));
     cout<<"\ncount/n3:"<<(obj.count/(n*n*n));
     return 0;
