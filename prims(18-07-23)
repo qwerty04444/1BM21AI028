@@ -1,78 +1,62 @@
 #include <iostream>
-#include <vector>
-#include <queue>
 #include <limits>
 
 using namespace std;
 
+const int MAX_V = 100; // Maximum number of vertices
+
 class Graph {
 private:
-    int V; 
-    vector<vector<pair<int, int>>> adjList;
+    int V; // Number of vertices
+    int adjacencyMatrix[MAX_V][MAX_V]; // Adjacency matrix representation
 
 public:
     Graph(int vertices) : V(vertices) {
-        adjList.resize(V);
+        // Initialize adjacency matrix with maximum values
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                adjacencyMatrix[i][j] = numeric_limits<int>::max();
+            }
+        }
     }
 
     void addEdge(int u, int v, int weight) {
-        adjList[u].emplace_back(v, weight);
-        adjList[v].emplace_back(u, weight);
+        adjacencyMatrix[u][v] = weight;
+        adjacencyMatrix[v][u] = weight;
     }
 
     int primsMST() {
-      
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
         int startVertex = 0; // Start with vertex 0
-        vector<bool> visited(V, false);
+        bool visited[MAX_V] = { false };
         int minCost = 0;
 
-        pq.push(make_pair(0, startVertex));
+        visited[startVertex] = true;
 
-        while (!pq.empty()) {
-            int u = pq.top().second;
-            int cost = pq.top().first;
-            pq.pop();
+        // Track the nearest vertex to the MST for each vertex
+        int nearest[MAX_V];
+        for (int i = 0; i < V; i++) {
+            nearest[i] = (visited[i]) ? startVertex : -1;
+        }
 
-            if (visited[u])
-                continue;
+        for (int i = 1; i < V; i++) {
+            int u = -1;
+
+            // Find the unvisited vertex with the minimum distance to the MST
+            for (int j = 0; j < V; j++) {
+                if (!visited[j] && (u == -1 || nearest[j] != -1 && adjacencyMatrix[j][nearest[j]] < adjacencyMatrix[u][nearest[u]])) {
+                    u = j;
+                }
+            }
 
             visited[u] = true;
-            minCost += cost;
+            minCost += adjacencyMatrix[u][nearest[u]];
 
-            for (const auto& neighbor : adjList[u]) {
-                int v = neighbor.first;
-                int weight = neighbor.second;
-
-                if (!visited[v])
-                    pq.push(make_pair(weight, v));
+            // Update the nearest vertex to the MST for the unvisited neighbors of u
+            for (int v = 0; v < V; v++) {
+                if (!visited[v] && adjacencyMatrix[u][v] < adjacencyMatrix[v][nearest[v]]) {
+                    nearest[v] = u;
+                }
             }
         }
 
         return minCost;
-    }
-};
-
-int main() {
-    int V, E;
-    cout << "Enter the number of vertices: ";
-    cin >> V;
-    cout << "Enter the number of edges: ";
-    cin >> E;
-
-    Graph graph(V);
-
-    cout << "Enter the edges (source, destination, weight):" << endl;
-    for (int i = 0; i < E; ++i) {
-        int u, v, weight;
-        cin >> u >> v >> weight;
-        graph.addEdge(u, v, weight);
-    }
-
-    int minCost = graph.primsMST();
-
-    cout << "Minimum cost of the MST: " << minCost << endl;
-
-    return 0;
-}
