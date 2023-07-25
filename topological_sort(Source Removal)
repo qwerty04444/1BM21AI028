@@ -1,20 +1,15 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 
-class Graph {
-	
-	int V;
 
-	
+class Graph {
+	int V;
 	list<int>* adj;
 
 public:
 	Graph(int V);
 
-
 	void addEdge(int u, int v);
-
 
 	void topologicalSort();
 };
@@ -30,13 +25,9 @@ void Graph::addEdge(int u, int v)
 	adj[u].push_back(v);
 }
 
-
 void Graph::topologicalSort()
 {
-
 	vector<int> in_degree(V, 0);
-
-
 	for (int u = 0; u < V; u++) {
 		list<int>::iterator itr;
 		for (itr = adj[u].begin();
@@ -50,12 +41,13 @@ void Graph::topologicalSort()
 		if (in_degree[i] == 0)
 			q.push(i);
 
+
 	int cnt = 0;
 
-
+	vector<int> top_order;
 
 	while (!q.empty()) {
-		
+
 		int u = q.front();
 		q.pop();
 		top_order.push_back(u);
@@ -64,15 +56,12 @@ void Graph::topologicalSort()
 		for (itr = adj[u].begin();
 			itr != adj[u].end(); itr++)
 
-			// If in-degree becomes zero,
-			// add it to queue
 			if (--in_degree[*itr] == 0)
 				q.push(*itr);
 
 		cnt++;
 	}
 
-	
 	if (cnt != V) {
 		cout << "There exists a cycle in the graph\n";
 		return;
@@ -83,17 +72,24 @@ void Graph::topologicalSort()
 	cout << endl;
 }
 
-
 int main()
 {
+    int n,m,a,b;
+    cout<<"enter number of vertices : ";
+    cin>>n;
+    Graph g(n);
 
-	Graph g(6);
-	g.addEdge(5, 2);
-	g.addEdge(5, 0);
-	g.addEdge(4, 0);
-	g.addEdge(4, 1);
-	g.addEdge(2, 3);
-	g.addEdge(3, 1);
+    cout<<"enter number of edges : ";
+    cin>>m;
+
+    for(int i=0;i<m;i++)
+    {
+        cout<<"enter 1st edge of edge "<<i<<" : ";
+        cin>>a;
+        cout<<"enter 2nd edge of edge "<<i<<" : ";
+        cin>>b;
+        g.addEdge(a,b);
+    }
 
 	cout << "Following is a Topological Sort of\n";
 	g.topologicalSort();
