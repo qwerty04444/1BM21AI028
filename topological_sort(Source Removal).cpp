@@ -1,98 +1,54 @@
-#include <bits/stdc++.h>
+#include<iostream>
 using namespace std;
 
-
-class Graph {
-	int V;
-	list<int>* adj;
-
-public:
-	Graph(int V);
-
-	void addEdge(int u, int v);
-
-	void topologicalSort();
+struct edge
+{
+    int ind=0;
+    int ver[10];
 };
-
-Graph::Graph(int V)
-{
-	this->V = V;
-	adj = new list<int>[V];
-}
-
-void Graph::addEdge(int u, int v)
-{
-	adj[u].push_back(v);
-}
-
-void Graph::topologicalSort()
-{
-	vector<int> in_degree(V, 0);
-	for (int u = 0; u < V; u++) {
-		list<int>::iterator itr;
-		for (itr = adj[u].begin();
-			itr != adj[u].end(); itr++)
-			in_degree[*itr]++;
-	}
-
-
-	queue<int> q;
-	for (int i = 0; i < V; i++)
-		if (in_degree[i] == 0)
-			q.push(i);
-
-
-	int cnt = 0;
-
-	vector<int> top_order;
-
-	while (!q.empty()) {
-
-		int u = q.front();
-		q.pop();
-		top_order.push_back(u);
-
-		list<int>::iterator itr;
-		for (itr = adj[u].begin();
-			itr != adj[u].end(); itr++)
-
-			if (--in_degree[*itr] == 0)
-				q.push(*itr);
-
-		cnt++;
-	}
-
-	if (cnt != V) {
-		cout << "There exists a cycle in the graph\n";
-		return;
-	}
-
-	for (int i = 0; i < top_order.size(); i++)
-		cout << top_order[i] << " ";
-	cout << endl;
-}
 
 int main()
 {
-    int n,m,a,b;
+    int n,m,n1,n2,i,j,k,l;
     cout<<"enter number of vertices : ";
     cin>>n;
-    Graph g(n);
+
+    struct edge e[n];
 
     cout<<"enter number of edges : ";
     cin>>m;
 
-    for(int i=0;i<m;i++)
+    for(int i=0;i<n;i++)
     {
-        cout<<"enter 1st vertice of edge "<<i<<" : ";
-        cin>>a;
-        cout<<"enter 2nd vertice of edge "<<i<<" : ";
-        cin>>b;
-        g.addEdge(a,b);
+        cout<<"enter the number of indegree vertices for vertex "<<i<<" : ";
+        cin>>n1;
+        e[i].ind=n1;
+
+        for(int j=0;j<n1;j++)
+        {
+            cout<<"enter the vertex : ";
+            cin>>e[i].ver[j];
+        }
     }
 
-	cout << "Following is a Topological Sort of\n";
-	g.topologicalSort();
-
-	return 0;
+    for (i=0;i<n;i++)
+    {
+        for (j=0;j<n;j++)
+        {
+            if (e[j].ind==0)
+            {
+                e[j].ind=-1;
+                cout<<j;
+            }
+            for (int k=0;k<n;k++)
+            {
+                n2=e[k].ind;
+                for (int l=0;l<n2;l++)
+                    if (e[k].ver[l]==j && e[k].ind>0)
+                    {
+                        e[k].ind--;
+                    }
+            }
+        }
+    }
 }
