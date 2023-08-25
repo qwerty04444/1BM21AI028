@@ -31,7 +31,7 @@ int binomialCoeff(int n, int k)
 
 int min(int a, int b) { return (a < b) ? a : b; }
 
-// Driver Code
+
 int main()
 {
 	int n = 5, k = 2;
