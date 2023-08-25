@@ -1,37 +1,57 @@
-#include<stdio.h>
-#include<conio.h>
-void main()
+#include <bits/stdc++.h>
+#include<iostream>
+using namespace std;
+# define NO_OF_CHARS 256
+
+class horspool
 {
-int table[126];
-char t[100],p[25];
-int n,i,k,j,m,flag=0;
-clrscr();
-printf(“Enter the text : “);
-gets(t);
-n=strlen(t);
-printf(“Enter the pattern : “);
-gets(p);
-m=strlen(p);
-for(i=0;i<126;i++)
-table[i]=m;
-for(j=0;j<m-2;j++)
-table[p[j]]=m-1-j;
-i=m-1;
-while(i<=n-1)
+public:
+    void badCharHeuristic( string str, int size, int badchar[NO_OF_CHARS])
+    {
+        int i;
+        for (i = 0; i < NO_OF_CHARS; i++)
+            badchar[i] = -1;
+
+        for (i = 0; i < size; i++)
+            badchar[(int) str[i]] = i;
+    }
+
+    void searchs( string txt, string pat)
+    {
+        int m = pat.size();
+        int n = txt.size();
+        int badchar[NO_OF_CHARS];
+        badCharHeuristic(pat, m, badchar);
+
+        int s = 0;
+        while(s <= (n - m))
+        {
+            int j = m - 1;
+            while(j >= 0 && pat[j] == txt[s + j])
+                j--;
+            if (j < 0)
+            {
+                cout << "pattern occurs at shift = " << s << endl;
+                s += (s + m < n)? m-badchar[txt[s + m]] : 1;
+            }
+            else
+                s += max(1, j - badchar[txt[s + j]]);
+        }
+    }
+};
+
+int main()
 {
-k=0;
-while(k<=m-1 && p[m-1-k]==t[i-k])
-k++;
-if(k==m)
-{
-printf(“The position of the pattern is %dn”,i-m+2);
-flag=1;
-break;
-}
-else
-i=i+table[t[i]];
-}
-if(!flag)
-printf(“Pattern is not found in the given text “);
-getch();
+    horspool h;
+	string txt;
+	string pat;
+
+	cout<<"enter the text : ";
+    cin>>txt;
+
+	cout<<"enter string to be searched : ";
+	cin>>pat;
+
+	h.searchs(txt, pat);
+	return 0;
 }
