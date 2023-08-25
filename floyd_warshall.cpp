@@ -1,68 +1,58 @@
-
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
+#define N 100
+#define INF 999
 
-
-#define V 4
-
-
-#define INF 99999
-
-
-void printSolution(int dist[][V]);
-
-void floydWarshall(int dist[][V])
+class floyd
 {
+public:
+    void printMatrix(int matrix[N][N],int n) {
+      for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+          if (matrix[i][j] == INF)
+            printf("%4s", "INF");
+          else
+            printf("%4d", matrix[i][j]);
+        }
+        printf("\n");
+      }
+    }
 
-	int i, j, k;
+    void floydWarshall(int graph[N][N], int n) {
+      int matrix[N][N], i, j, k;
 
+      for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+          matrix[i][j] = graph[i][j];
 
-	for (k = 0; k < V; k++) {
-		
-		for (i = 0; i < V; i++) {
-		
-			for (j = 0; j < V; j++) {
-		
-				if (dist[i][j] > (dist[i][k] + dist[k][j])
-					&& (dist[k][j] != INF
-						&& dist[i][k] != INF))
-					dist[i][j] = dist[i][k] + dist[k][j];
-			}
-		}
-	}
+      for (k = 0; k < n; k++) {
+        for (i = 0; i < n; i++) {
+          for (j = 0; j < n; j++) {
+            if (matrix[i][k] + matrix[k][j] < matrix[i][j])
+              matrix[i][j] = matrix[i][k] + matrix[k][j];
+          }
+        }
+      }
+      printMatrix(matrix,n);
+    }
+};
 
+int main() {
+    floyd f;
+  int graph[N][N];
+  int n;
 
-	printSolution(dist);
-}
-
-void printSolution(int dist[][V])
-{
-	cout << "The following matrix shows the shortest "
-			"distances"
-			" between every pair of vertices \n";
-	for (int i = 0; i < V; i++) {
-		for (int j = 0; j < V; j++) {
-			if (dist[i][j] == INF)
-				cout << "INF"
-					<< " ";
-			else
-				cout << dist[i][j] << " ";
-		}
-		cout << endl;
-	}
-}
-
-int main()
-{
-			
-	int graph[V][V] = { { 0, 5, INF, 10 },
-						{ INF, 0, 3, INF },
-						{ INF, INF, 0, 1 },
-						{ INF, INF, INF, 0 } };
-
-
-	floydWarshall(graph);
-	return 0;
+  cout<<"Enter n : ";
+  cin>>n;
+  cout<<"Enter graph (999 for infinity) : "<<endl;
+  for(int i=0;i<n;i++)
+  {
+      for(int j=0;j<n;j++)
+      {
+          cin>>graph[i][j];
+      }
+  }
+  f.floydWarshall(graph,n);
 }
 
 
